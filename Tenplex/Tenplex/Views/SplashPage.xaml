@@ -1,0 +1,19 @@
+﻿<Page x:Class="Tenplex.Views.SplashPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <StackPanel HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
+            <ProgressRing Height="32"
+                          IsActive="True"
+                          Margin="16 0"
+                          Width="32" />
+            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" 
+                       Text="Welcome" />
+        </StackPanel>
+
+    </Grid>
+</Page>

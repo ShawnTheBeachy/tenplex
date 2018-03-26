@@ -1,0 +1,72 @@
+﻿<Page x:Class="Tenplex.Views.ShellPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:local="using:Tenplex.Views"
+      xmlns:t10controls="using:Template10.Controls"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <t10controls:NavViewEx x:Name="ShellView"
+                               x:FieldModifier="Public"
+                               Grid.Row="0"
+                               MenuItemsSource="{x:Bind local:ShellPage.GetLibrarySections(_librarySectionsService.LibrarySections), Mode=OneWay}"
+                               RequestedTheme="Dark">
+
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox x:Name="SearchBox"
+                                PlaceholderText="Search"
+                                QueryIcon="Find" />
+            </NavigationView.AutoSuggestBox>
+
+        </t10controls:NavViewEx>
+
+        <Grid x:Name="TransportControlsBackground"
+              Grid.Row="1">
+
+            <Grid.Background>
+                <AcrylicBrush BackgroundSource="HostBackdrop"
+                              Opacity=".8"
+                              TintColor="{ThemeResource SystemAccentColor}"
+                              TintOpacity=".8" />
+            </Grid.Background>
+            
+        </Grid>
+
+        <MediaPlayerElement x:Name="Player"
+                            AreTransportControlsEnabled="True"
+                            AutoPlay="True"
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch">
+
+            <MediaPlayerElement.TransportControls>
+                <MediaTransportControls x:Name="ShellTransportControls"
+                                        Background="Red"
+                                        IsFastForwardButtonVisible="True"
+                                        IsFastForwardEnabled="True"
+                                        IsFastRewindButtonVisible="True"
+                                        IsFastRewindEnabled="True"
+                                        IsFullWindowButtonVisible="False"
+                                        IsFullWindowEnabled="False"
+                                        IsNextTrackButtonVisible="True"
+                                        IsPlaybackRateButtonVisible="True"
+                                        IsPlaybackRateEnabled="True"
+                                        IsPreviousTrackButtonVisible="True"
+                                        IsRepeatButtonVisible="True"
+                                        IsRepeatEnabled="True"
+                                        IsSkipBackwardButtonVisible="True"
+                                        IsSkipBackwardEnabled="True"
+                                        IsSkipForwardButtonVisible="True"
+                                        IsSkipForwardEnabled="True"
+                                        IsZoomButtonVisible="False"
+                                        IsZoomEnabled="False" />
+            </MediaPlayerElement.TransportControls>
+            
+        </MediaPlayerElement>
+
+    </Grid>
+</Page>

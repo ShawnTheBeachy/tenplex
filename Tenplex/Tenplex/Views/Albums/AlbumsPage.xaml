@@ -1,0 +1,85 @@
+﻿<Page x:Class="Tenplex.Views.AlbumsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:local="using:Tenplex.Views"
+      xmlns:models="using:Tenplex.Models"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      NavigationCacheMode="Enabled">
+
+    <Page.Resources>
+        <x:Double x:Key="AlbumArtworkSize">204</x:Double>
+    </Page.Resources>
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Button x:Name="ArtistsButton"
+                Click="ArtistsButton_Click"
+                Content="By Album Artist" />
+
+        <GridView x:Name="AlbumsGridView"
+                  IsItemClickEnabled="True"
+                  ItemClick="AlbumsGridView_ItemClick"
+                  ItemsSource="{x:Bind ViewModel.Albums, Mode=OneWay}"
+                  Padding="4"
+                  RelativePanel.Below="ArtistsButton"
+                  SelectionMode="None">
+
+            <GridView.Header>
+                <TextBlock x:Name="AlbumsHeader"
+                           Margin="12"
+                           Style="{ThemeResource SubtitleTextBlockStyle}">
+                    <Run Text="{x:Bind ViewModel.Albums.Count, Mode=OneWay}" /> albums
+                </TextBlock>
+            </GridView.Header>
+
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Margin"
+                            Value="12" />
+                    <Setter Property="Width"
+                            Value="{StaticResource AlbumArtworkSize}" />
+                </Style>
+            </GridView.ItemContainerStyle>
+
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="models:Album">
+                    <RelativePanel x:Name="AlbumRelativePanel">
+
+                        <ProgressRing x:Name="LoadingImageProgressRing"
+                                      Height="24"
+                                      IsActive="True"
+                                      RelativePanel.AlignHorizontalCenterWith="AlbumArtworkImage"
+                                      RelativePanel.AlignVerticalCenterWith="AlbumArtworkImage"
+                                      Width="24" />
+
+                        <Image x:Name="AlbumArtworkImage"
+                               Height="{StaticResource AlbumArtworkSize}"
+                               Source="{x:Bind local:AlbumsPage.GetAlbumArtworkUrl(Thumb)}"
+                               Stretch="UniformToFill"
+                               Width="{StaticResource AlbumArtworkSize}" />
+
+                        <TextBlock x:Name="AlbumTitleTextBlock"
+                                   Margin="2 6 2 0"
+                                   RelativePanel.Below="AlbumArtworkImage"
+                                   Style="{ThemeResource BaseTextBlockStyle}"
+                                   Text="{x:Bind Title}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="NoWrap" />
+
+                        <TextBlock x:Name="ParentTitleTextBlock"
+                                   Foreground="{ThemeResource ApplicationSecondaryForegroundThemeBrush}"
+                                   Margin="2 0 2 4"
+                                   RelativePanel.Below="AlbumTitleTextBlock"
+                                   Style="{ThemeResource BaseTextBlockStyle}"
+                                   Text="{x:Bind ParentTitle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="NoWrap" />
+                        
+                    </RelativePanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+
+        </GridView>
+
+    </RelativePanel>
+
+</Page>
