@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenplex", "Tenplex\Tenplex.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenplex.Models", "Tenplex.Models\Tenplex.Models.csproj", "{C26170EB-A4F8-416B-B249-B6694142BB91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism.Unity.Windows", "..\..\..\Documents\GitHub\Template10_TLT\Source\Prism.Unity.Windows\Prism.Unity.Windows.csproj", "{CC3018EB-6D2B-4306-94A1-3A7CBA7A8F18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism.Unity.Windows", "..\..\TLT_Template10\Source\Prism.Unity.Windows\Prism.Unity.Windows.csproj", "{CC3018EB-6D2B-4306-94A1-3A7CBA7A8F18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism.Windows", "..\..\..\Documents\GitHub\Template10_TLT\Source\Prism.Windows\Prism.Windows.csproj", "{648C8631-C97F-4B81-98FC-F4370317751A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism.Windows", "..\..\TLT_Template10\Source\Prism.Windows\Prism.Windows.csproj", "{648C8631-C97F-4B81-98FC-F4370317751A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template10.Extras.10586", "..\..\..\Documents\GitHub\Template10_TLT\Source\Template10.Extras.10586\Template10.Extras.10586.csproj", "{9BB18D4B-BCDD-43C9-A7C2-416D13DD39A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template10.Extras.10586", "..\..\TLT_Template10\Source\Template10.Extras.10586\Template10.Extras.10586.csproj", "{9BB18D4B-BCDD-43C9-A7C2-416D13DD39A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template10.Extras.16299", "..\..\..\Documents\GitHub\Template10_TLT\Source\Template10.Extras.16299\Template10.Extras.16299.csproj", "{51E89714-0358-486D-8DFB-6600A3FA7319}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template10.Extras.16299", "..\..\TLT_Template10\Source\Template10.Extras.16299\Template10.Extras.16299.csproj", "{51E89714-0358-486D-8DFB-6600A3FA7319}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

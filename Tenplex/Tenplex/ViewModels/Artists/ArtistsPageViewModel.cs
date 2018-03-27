@@ -8,17 +8,17 @@ using Tenplex.Services;
 
 namespace Tenplex.ViewModels
 {
-    public class AlbumsPageViewModel : ViewModelBase
+    public class ArtistsPageViewModel : ViewModelBase
     {
-        private readonly AlbumsService _albumsService;
+        private readonly ArtistsService _artistsService;
 
-        public ObservableCollection<Album> Albums { get; set; } = new ObservableCollection<Album>();
+        public ObservableCollection<Artist> Artists { get; set; } = new ObservableCollection<Artist>();
         public string SectionKey = default(string);
 
-        public AlbumsPageViewModel(AlbumsService albumsService)
+        public ArtistsPageViewModel(ArtistsService artistsService)
         {
-            _albumsService = albumsService ?? throw new ArgumentNullException(nameof(albumsService));
-            Albums = _albumsService.Albums;
+            _artistsService = artistsService ?? throw new ArgumentNullException(nameof(artistsService));
+            Artists = _artistsService.Artists;
         }
 
         public async override Task OnNavigatedToAsync(INavigationParameters parameters)
@@ -28,10 +28,10 @@ namespace Tenplex.ViewModels
             if (parameters.ContainsKey("sectionKey"))
                 sectionKey = parameters.GetValue<string>("sectionKey");
 
-            if (Albums.Count == 0 || sectionKey != SectionKey)
+            if (Artists.Count == 0 || sectionKey != SectionKey)
             {
-                _albumsService.Albums.Clear();
-                await _albumsService.LoadAlbumsAsync(sectionKey);
+                _artistsService.Artists.Clear();
+                await _artistsService.LoadArtistsAsync(sectionKey);
             }
 
             SectionKey = sectionKey;

@@ -11,204 +11,226 @@
                               Source="{Binding Tracks, Mode=OneWay}" />
     </Page.Resources>
 
-    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <ScrollViewer x:Name="MainScrollViewer" 
+                  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  VerticalScrollBarVisibility="Auto">
 
-        <RelativePanel x:Name="HeaderPanel"
-                       Height="588"
+        <RelativePanel>
+
+            <RelativePanel x:Name="HeaderPanel"
+                           Height="480"
+                           RelativePanel.AlignLeftWithPanel="True"
+                           RelativePanel.AlignRightWithPanel="True"
+                           RelativePanel.AlignTopWithPanel="True">
+
+                <Image x:Name="HeaderImage"
+                       HorizontalAlignment="Center"
+                       RelativePanel.AlignBottomWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"
-                       RelativePanel.AlignTopWithPanel="True">
+                       RelativePanel.AlignTopWithPanel="True"
+                       Source="{x:Bind GetImageSource(ViewModel.Album.Art), Mode=OneWay}"
+                       Stretch="UniformToFill"
+                       VerticalAlignment="Center">
 
-            <Image x:Name="HeaderImage"
-                   HorizontalAlignment="Center"
-                   RelativePanel.AlignBottomWithPanel="True"
-                   RelativePanel.AlignLeftWithPanel="True"
-                   RelativePanel.AlignRightWithPanel="True"
-                   RelativePanel.AlignTopWithPanel="True"
-                   Source="{x:Bind GetImageSource(ViewModel.Album.Art), Mode=OneWay}"
-                   Stretch="UniformToFill"
-                   VerticalAlignment="Center">
+                    <interactivity:Interaction.Behaviors>
+                        <effects:Blur AutomaticallyStart="True"
+                                      Duration="0"
+                                      Value="5" />
+                    </interactivity:Interaction.Behaviors>
 
-                <interactivity:Interaction.Behaviors>
-                    <effects:Blur AutomaticallyStart="True"
-                                  Duration="0"
-                                  Value="5" />
-                </interactivity:Interaction.Behaviors>
+                </Image>
 
-            </Image>
-
-            <Grid x:Name="HeaderOverlayGrid"
-                  RelativePanel.AlignBottomWithPanel="True"
-                  RelativePanel.AlignLeftWithPanel="True"
-                  RelativePanel.AlignRightWithPanel="True"
-                  RelativePanel.AlignTopWithPanel="True">
-
-                <Grid.Background>
-                    <AcrylicBrush BackgroundSource="Backdrop"
-                                  FallbackColor="Transparent"
-                                  Opacity=".5"
-                                  TintColor="{ThemeResource SystemAccentColorDark1}"
-                                  TintOpacity=".5" />
-                </Grid.Background>
-
-                <Grid HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch">
-
-                    <Grid.Background>
-                        <LinearGradientBrush EndPoint="0 1"
-                                             StartPoint="0 0">
-                            <GradientStop Color="Transparent"
-                                          Offset="0" />
-                            <GradientStop Color="Black"
-                                          Offset="1" />
-                        </LinearGradientBrush>
-                    </Grid.Background>
-                    
-                </Grid>
-
-            </Grid>
-
-            <Image x:Name="AlbumImage"
-                   Height="300"
-                   Margin="24"
-                   RelativePanel.AlignVerticalCenterWithPanel="True"
-                   Source="{x:Bind GetImageSource(ViewModel.Album.Thumb), Mode=OneWay}"
-                   Stretch="UniformToFill"
-                   Width="300" />
-
-            <TextBlock x:Name="AlbumTitle"
-                       FontWeight="SemiBold"
-                       Margin="0 12 0 0"
-                       RelativePanel.AlignTopWith="AlbumImage"
-                       RelativePanel.RightOf="AlbumImage"
-                       Style="{ThemeResource HeaderTextBlockStyle}"
-                       Text="{x:Bind ViewModel.Album.Title, Mode=OneWay}" />
-
-            <TextBlock x:Name="AlbumArtist"
-                       RelativePanel.Below="AlbumTitle"
-                       RelativePanel.RightOf="AlbumImage"
-                       Style="{ThemeResource SubheaderTextBlockStyle}"
-                       Text="{x:Bind ViewModel.Album.ParentTitle, Mode=OneWay}" />
-
-            <TextBlock x:Name="AlbumYear"
-                       RelativePanel.Below="AlbumArtist"
-                       RelativePanel.RightOf="AlbumImage"
-                       Style="{ThemeResource TitleTextBlockStyle}"
-                       Text="{x:Bind ViewModel.Album.Year, Mode=OneWay}" />
-            
-        </RelativePanel>
-
-        <SemanticZoom x:Name="TracksSemanticZoom"
-                      IsTabStop="False"
+                <Grid x:Name="HeaderOverlayGrid"
+                      RelativePanel.AlignBottomWithPanel="True"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
-                      RelativePanel.Below="HeaderPanel">
+                      RelativePanel.AlignTopWithPanel="True">
 
-            <SemanticZoom.ZoomedInView>
-                <ListView x:Name="TracksListView"
-                          ItemsSource="{Binding Source={StaticResource TracksViewSource}, Mode=OneWay}"
-                          Margin="12 24 12 0"
-                          SelectionChanged="TracksListView_SelectionChanged">
+                    <Grid.Background>
+                        <AcrylicBrush BackgroundSource="Backdrop"
+                                      FallbackColor="Transparent"
+                                      Opacity=".5"
+                                      TintColor="{ThemeResource SystemAccentColorDark1}"
+                                      TintOpacity=".5" />
+                    </Grid.Background>
 
-                    <ListView.GroupStyle>
-                        <GroupStyle HeaderTemplate="{StaticResource MenuHeaderTemplate}" />
-                    </ListView.GroupStyle>
+                    <interactivity:Interaction.Behaviors>
+                        <interactivity:BehaviorCollection>
+                            <effects:Fade AutomaticallyStart="True"
+                                      Duration="0"
+                                      Value="0" />
+                            <effects:Fade AutomaticallyStart="True"
+                                      Duration="1000"
+                                      Value="1" />
+                        </interactivity:BehaviorCollection>
+                    </interactivity:Interaction.Behaviors>
 
-                    <ListView.Header>
-                        <RelativePanel>
-                            <TextBlock x:Name="TracksHeader"
-                                       Margin="12"
-                                       Style="{ThemeResource SubtitleTextBlockStyle}"
-                                       Text="Tracks" />
+                    <Grid HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
 
-                            <Grid x:Name="HeaderGrid"
-                                  Margin="12"
-                                  RelativePanel.AlignLeftWithPanel="True"
-                                  RelativePanel.AlignRightWithPanel="True"
-                                  RelativePanel.Below="TracksHeader">
+                        <Grid.Background>
+                            <LinearGradientBrush EndPoint="0 1"
+                                                 StartPoint="0 0">
+                                <GradientStop Color="Transparent"
+                                              Offset="0" />
+                                <GradientStop Color="Black"
+                                              Offset="1" />
+                            </LinearGradientBrush>
+                        </Grid.Background>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="120" />
-                                </Grid.ColumnDefinitions>
+                    </Grid>
 
-                                <Grid.Resources>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Target="FontWeight"
-                                                Value="SemiBold" />
-                                    </Style>
-                                </Grid.Resources>
+                </Grid>
 
-                                <TextBlock x:Name="TrackNumberHeader"
-                                           Grid.Column="0"
-                                           Text="#" />
-                                <TextBlock x:Name="TitleHeader"
-                                           Grid.Column="1"
-                                           Text="Title" />
-                                <TextBlock x:Name="LengthHeader"
-                                           Grid.Column="2"
-                                           Text="Length" />
+                <Image x:Name="AlbumImage"
+                       Height="300"
+                       Margin="24"
+                       RelativePanel.AlignVerticalCenterWithPanel="True"
+                       Source="{x:Bind GetImageSource(ViewModel.Album.Thumb), Mode=OneWay}"
+                       Stretch="UniformToFill"
+                       Width="300" />
 
-                            </Grid>
-                        </RelativePanel>
-                    </ListView.Header>
+                <TextBlock x:Name="AlbumTitle"
+                           FontWeight="SemiBold"
+                           Margin="0 12 0 0"
+                           MaxLines="3"
+                           RelativePanel.AlignTopWith="AlbumImage"
+                           RelativePanel.RightOf="AlbumImage"
+                           Style="{ThemeResource HeaderTextBlockStyle}"
+                           Text="{x:Bind ViewModel.Album.Title, Mode=OneWay}"
+                           TextTrimming="CharacterEllipsis"
+                           ToolTipService.ToolTip="{x:Bind ViewModel.Album.Title, Mode=OneWay}" />
 
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment"
-                                    Value="Stretch" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
+                <TextBlock x:Name="AlbumArtist"
+                           RelativePanel.Below="AlbumTitle"
+                           RelativePanel.RightOf="AlbumImage"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"
+                           Text="{x:Bind ViewModel.Album.ParentTitle, Mode=OneWay}" />
 
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Track">
-                            <Grid>
+                <TextBlock x:Name="AlbumYear"
+                           RelativePanel.Below="AlbumArtist"
+                           RelativePanel.RightOf="AlbumImage"
+                           Style="{ThemeResource TitleTextBlockStyle}"
+                           Text="{x:Bind ViewModel.Album.Year, Mode=OneWay}" />
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="120" />
-                                </Grid.ColumnDefinitions>
+            </RelativePanel>
 
-                                <TextBlock x:Name="TrackNumber"
-                                           Grid.Column="0"
-                                           Text="{x:Bind TrackNumber}" />
-                                <TextBlock x:Name="Title"
-                                           Grid.Column="1"
-                                           Text="{x:Bind Title}" />
-                                <TextBlock x:Name="Duration"
-                                           Grid.Column="2">
-                                    <Run Text="{x:Bind Duration.Hours}" />:<Run Text="{x:Bind Duration.Minutes}" />:<Run Text="{x:Bind Duration.Seconds}" />
-                                </TextBlock>
+            <SemanticZoom x:Name="TracksSemanticZoom"
+                          IsTabStop="False"
+                          RelativePanel.AlignLeftWithPanel="True"
+                          RelativePanel.AlignRightWithPanel="True"
+                          RelativePanel.Below="HeaderPanel">
 
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                <SemanticZoom.ZoomedInView>
+                    <ListView x:Name="TracksListView"
+                              ItemsSource="{Binding Source={StaticResource TracksViewSource}, Mode=OneWay}"
+                              Margin="12 24 12 0"
+                              SelectionChanged="TracksListView_SelectionChanged">
 
-                </ListView>
-            </SemanticZoom.ZoomedInView>
+                        <ListView.GroupStyle>
+                            <GroupStyle HeaderTemplate="{StaticResource MenuHeaderTemplate}" />
+                        </ListView.GroupStyle>
 
-            <SemanticZoom.ZoomedOutView>
-                <GridView x:Name="JumpGridView"
-                          HorizontalAlignment="Center"
-                          ItemTemplate="{StaticResource JumpTemplate}"
-                          ItemsSource="{Binding Path=CollectionGroups, Source={StaticResource TracksViewSource}, Mode=OneWay}"
-                          Margin="12"
-                          MaxWidth="300"
-                          VerticalAlignment="Center">
+                        <ListView.Header>
+                            <RelativePanel>
+                                <TextBlock x:Name="TracksHeader"
+                                           Margin="12"
+                                           Style="{ThemeResource SubtitleTextBlockStyle}"
+                                           Text="Tracks" />
 
-                    <GridView.ItemContainerStyle>
-                        <Style TargetType="GridViewItem">
-                            <Setter Property="Margin"
-                                    Value="6" />
-                        </Style>
-                    </GridView.ItemContainerStyle>
+                                <Grid x:Name="HeaderGrid"
+                                      Margin="12"
+                                      RelativePanel.AlignLeftWithPanel="True"
+                                      RelativePanel.AlignRightWithPanel="True"
+                                      RelativePanel.Below="TracksHeader">
 
-                </GridView>
-            </SemanticZoom.ZoomedOutView>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
 
-        </SemanticZoom>
-    </RelativePanel>
+                                    <Grid.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Target="FontWeight"
+                                                    Value="SemiBold" />
+                                        </Style>
+                                    </Grid.Resources>
+
+                                    <TextBlock x:Name="TrackNumberHeader"
+                                               Grid.Column="0"
+                                               Text="#" />
+                                    <TextBlock x:Name="TitleHeader"
+                                               Grid.Column="1"
+                                               Text="Title" />
+                                    <TextBlock x:Name="LengthHeader"
+                                               Grid.Column="2"
+                                               Text="Length" />
+
+                                </Grid>
+                            </RelativePanel>
+                        </ListView.Header>
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Track">
+                                <Grid>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock x:Name="TrackNumber"
+                                               Grid.Column="0"
+                                               Text="{x:Bind TrackNumber}" />
+                                    <TextBlock x:Name="Title"
+                                               Grid.Column="1"
+                                               Text="{x:Bind Title}" />
+                                    <TextBlock x:Name="Duration"
+                                               Grid.Column="2">
+                                        <Run Text="{x:Bind Duration.Hours}" />:<Run Text="{x:Bind Duration.Minutes}" />:<Run Text="{x:Bind Duration.Seconds}" />
+                                    </TextBlock>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+                </SemanticZoom.ZoomedInView>
+
+                <SemanticZoom.ZoomedOutView>
+                    <GridView x:Name="JumpGridView"
+                              HorizontalAlignment="Center"
+                              ItemTemplate="{StaticResource JumpTemplate}"
+                              ItemsSource="{Binding Path=CollectionGroups, Source={StaticResource TracksViewSource}, Mode=OneWay}"
+                              Margin="12"
+                              MaxWidth="300"
+                              VerticalAlignment="Center">
+
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="Margin"
+                                        Value="6" />
+                            </Style>
+                        </GridView.ItemContainerStyle>
+
+                    </GridView>
+                </SemanticZoom.ZoomedOutView>
+
+            </SemanticZoom>
+        </RelativePanel>
+
+    </ScrollViewer>
 
 </Page>

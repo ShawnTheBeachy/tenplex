@@ -13,18 +13,20 @@ namespace Tenplex.Views
 {
     public sealed partial class AlbumPage : Page
     {
-        private readonly ServerConnectionInfoService _connectionInfoService;
+        private readonly AuthorizationService _authorizationService;
+        private readonly ConnectionsService _connectionsService;
         private AlbumPageViewModel ViewModel => DataContext as AlbumPageViewModel;
 
         public AlbumPage()
         {
             InitializeComponent();
-            _connectionInfoService = Prism.PrismApplicationBase.Current.Container.Resolve<ServerConnectionInfoService>();
+            _authorizationService = Prism.PrismApplicationBase.Current.Container.Resolve<AuthorizationService>();
+            _connectionsService = Prism.PrismApplicationBase.Current.Container.Resolve<ConnectionsService>();
         }
 
         public ImageSource GetImageSource(string url)
         {
-            var bitmap = new BitmapImage(new Uri($"http://{_connectionInfoService.GetServerIpAddress()}:{_connectionInfoService.GetServerPortNumber()}{url}?X-Plex-Token={_connectionInfoService.GetPlexAccessToken()}"));
+            var bitmap = new BitmapImage(new Uri($"{_connectionsService.CurrentConnection.Uri}{url}?X-Plex-Token={_authorizationService.GetAccessToken()}"));
             return bitmap;
         }
 
@@ -33,7 +35,7 @@ namespace Tenplex.Views
             base.OnNavigatedTo(e);
 
             var animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("albumImage");
-            animation?.TryStart(AlbumImage);
+            animation?.TryStart(AlbumImage, new[] { AlbumTitle, AlbumArtist, AlbumYear });
         }
 
         private void TracksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

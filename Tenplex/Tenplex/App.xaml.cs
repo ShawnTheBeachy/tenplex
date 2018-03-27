@@ -2,6 +2,7 @@
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
+using System.Linq;
 using System.Threading.Tasks;
 using Template10.Services.Compression;
 using Template10.Services.Dialog;
@@ -49,17 +50,24 @@ namespace Tenplex
             // Custom services.
 
             container.RegisterSingleton<ISerializationService, NewtonsoftSerializationService>();
-            container.RegisterSingleton<ServerConnectionInfoService, ServerConnectionInfoService>();
             container.RegisterSingleton<LibrarySectionsService, LibrarySectionsService>();
+            container.Register<AuthorizationService, AuthorizationService>();
             container.Register<AlbumsService, AlbumsService>();
+            container.Register<ArtistsService, ArtistsService>();
             container.Register<TracksService, TracksService>();
+
+            container.RegisterSingleton<ConnectionsService, ConnectionsService>();
+            container.RegisterSingleton<DevicesService, DevicesService>();
+            container.RegisterSingleton<ServersService, ServersService>();
+            container.RegisterSingleton<UsersService, UsersService>();
 
             // Pages and view-models.
 
             container.RegisterSingleton<ShellPage, ShellPage>();
-            container.RegisterForNavigation<ConnectionInfoPage, ConnectionInfoPageViewModel>(nameof(ConnectionInfoPage));
             container.RegisterForNavigation<AlbumsPage, AlbumsPageViewModel>("MusicPage");
             container.RegisterForNavigation<AlbumPage, AlbumPageViewModel>(nameof(AlbumPage));
+            container.RegisterForNavigation<SignInPage, SignInPageViewModel>(nameof(SignInPage));
+            container.RegisterForNavigation<UsersPage, UsersPageViewModel>(nameof(UsersPage));
         }
 
         public override async Task OnStartAsync(StartArgs args)
@@ -72,30 +80,54 @@ namespace Tenplex
                 case StartKinds.Launch when (args.Arguments is ILaunchActivatedEventArgs e):
                     Window.Current.Content = new SplashPage(e.SplashScreen);
 
-                    var connectionInfoService = Container.Resolve<ServerConnectionInfoService>();
-                    var hasConnectionInfo = connectionInfoService.HasConnectionInfo();
+                    var authorizationService = Container.Resolve<AuthorizationService>();
+                    var isAuthorized = authorizationService.IsAuthorized();
 
-                    if (hasConnectionInfo)
+                    if (isAuthorized)
                     {
-                        var apiService = Container.Resolve<IWebApiService>();
+                        var serversService = Container.Resolve<ServersService>();
+                        await serversService.InitializeAsync();
 
-                        apiService.AddHeader("X-Plex-Platform", "Windows");
-                        apiService.AddHeader("X-Plex-Platform-Version", "1709");       //TODO: Actually get Windows version.
-                        apiService.AddHeader("X-Plex-Provides", "player");
-                        apiService.AddHeader("X-Plex-Client-Identifier", "tenplex");   //TODO: Get device UUID.
-                        apiService.AddHeader("X-Plex-Product", "Tenplex");
-                        apiService.AddHeader("X-Plex-Version", "1.0.0.0");
-                        apiService.AddHeader("X-Plex-Device", "Unknown");              //TODO: Get manufacturer info.
-                        apiService.AddHeader("X-Plex-Token", connectionInfoService.GetPlexAccessToken());
+                        var usersService = Container.Resolve<UsersService>();
+                        await usersService.InitializeAsync();
 
-                        var shell = Container.Resolve<ShellPage>();
-                        Window.Current.Content = shell;
+                        if (usersService.CurrentUser == null)
+                        {
+                            var frame = new Frame();
+                            Window.Current.Content = frame;
 
-                        navigationService = shell.ShellView.NavigationService;
-                        navigationPath = PathBuilder.Create(nameof(ConnectionInfoPage)).ToString();
+                            navigationService = (IPlatformNavigationService)NavigationService.Create(frame, Gestures.Back, Gestures.Forward, Gestures.Refresh);
+                            navigationPath = PathBuilder.Create(nameof(UsersPage)).ToString();
+                        }
 
-                        var librarySectionsService = Container.Resolve<LibrarySectionsService>();
-                        await librarySectionsService.InitializeAsync();
+                        else
+                        {
+                            var devicesService = Container.Resolve<DevicesService>();
+                            await devicesService.InitializeAsync();
+
+                            var apiService = Container.Resolve<IWebApiService>();
+
+                            apiService.AddHeader("X-Plex-Platform", "Windows");
+                            apiService.AddHeader("X-Plex-Platform-Version", "1709");       //TODO: Actually get Windows version.
+                            apiService.AddHeader("X-Plex-Provides", "player");
+                            apiService.AddHeader("X-Plex-Client-Identifier", "tenplex");   //TODO: Get device UUID.
+                            apiService.AddHeader("X-Plex-Product", "Tenplex");
+                            apiService.AddHeader("X-Plex-Version", "1.0.0.0");
+                            apiService.AddHeader("X-Plex-Device", "Unknown");              //TODO: Get manufacturer info.
+                            apiService.AddHeader("X-Plex-Token", devicesService.CurrentDevice.AccessToken);
+
+                            var shell = Container.Resolve<ShellPage>();
+                            Window.Current.Content = shell;
+
+                            navigationService = shell.ShellView.NavigationService;
+                            navigationPath = PathBuilder.Create(nameof(UsersPage)).ToString();
+
+                            var connectionsService = Container.Resolve<ConnectionsService>();
+                            await connectionsService.InitializeAsync();
+
+                            var librarySectionsService = Container.Resolve<LibrarySectionsService>();
+                            await librarySectionsService.InitializeAsync();
+                        }
                     }
 
                     else
@@ -104,7 +136,7 @@ namespace Tenplex
                         Window.Current.Content = frame;
 
                         navigationService = (IPlatformNavigationService)NavigationService.Create(frame, Gestures.Back, Gestures.Forward, Gestures.Refresh);
-                        navigationPath = PathBuilder.Create(nameof(ConnectionInfoPage)).ToString();
+                        navigationPath = PathBuilder.Create(nameof(SignInPage)).ToString();
                     }
 
                     await navigationService.NavigateAsync(navigationPath);

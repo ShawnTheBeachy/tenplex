@@ -11,22 +11,20 @@ namespace Tenplex.Services
 {
     public sealed class LibrarySectionsService
     {
-        private readonly ServerConnectionInfoService _serverConnectionInfoService;
+        private readonly ConnectionsService _connectionsService;
         private readonly IWebApiService _webApiService;
 
         public ObservableCollection<LibrarySection> LibrarySections { get; } = new ObservableCollection<LibrarySection>();
 
-        public LibrarySectionsService(ServerConnectionInfoService serverConnectionInfoService, IWebApiService webApiService)
+        public LibrarySectionsService(ConnectionsService connectionsService, IWebApiService webApiService)
         {
-            _serverConnectionInfoService = serverConnectionInfoService ?? throw new ArgumentNullException(nameof(serverConnectionInfoService));
+            _connectionsService = connectionsService ?? throw new ArgumentNullException(nameof(connectionsService));
             _webApiService = webApiService ?? throw new ArgumentNullException(nameof(webApiService));
         }
 
         public async Task InitializeAsync()
         {
-            // this._webApiService.AddHeader("Accept", "application/json");
-
-            var url = $"http://{_serverConnectionInfoService.GetServerIpAddress()}:{_serverConnectionInfoService.GetServerPortNumber()}/library/sections";
+            var url = $"{_connectionsService.CurrentConnection.Uri}/library/sections";
             var result = await _webApiService.GetAsync(new Uri(url));
 
             var jObj = JObject.Parse(result);

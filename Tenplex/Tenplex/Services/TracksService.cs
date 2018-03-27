@@ -9,12 +9,12 @@ namespace Tenplex.Services
 {
     public sealed class TracksService
     {
-        private readonly ServerConnectionInfoService _serverConnectionInfoService;
+        private readonly ConnectionsService _connectionsService;
         private readonly IWebApiService _webApiService;
         
-        public TracksService(ServerConnectionInfoService serverConnectionInfoService, IWebApiService webApiService)
+        public TracksService(ConnectionsService connectionsService, IWebApiService webApiService)
         {
-            _serverConnectionInfoService = serverConnectionInfoService ?? throw new ArgumentNullException(nameof(serverConnectionInfoService));
+            _connectionsService = connectionsService ?? throw new ArgumentNullException(nameof(connectionsService));
             _webApiService = webApiService ?? throw new ArgumentNullException(nameof(webApiService));
         }
 
@@ -22,7 +22,7 @@ namespace Tenplex.Services
         {
             // this._webApiService.AddHeader("Accept", "application/json");
 
-            var url = $"http://{_serverConnectionInfoService.GetServerIpAddress()}:{_serverConnectionInfoService.GetServerPortNumber()}/library/metadata/{albumRatingKey}/children";
+            var url = $"{_connectionsService.CurrentConnection.Uri}/library/metadata/{albumRatingKey}/children";
             var result = await _webApiService.GetAsync(new Uri(url));
 
             var jObj = JObject.Parse(result);

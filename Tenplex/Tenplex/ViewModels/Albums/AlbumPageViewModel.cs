@@ -14,8 +14,9 @@ namespace Tenplex.ViewModels
 {
     public class AlbumPageViewModel : ViewModelBase
     {
+        private readonly AuthorizationService _authorizationService;
+        private readonly ConnectionsService _connectionsService;
         private ISerializationService _serializationService;
-        private readonly ServerConnectionInfoService _serverConnectionInfoService;
         private readonly ShellPage _shell;
         private readonly TracksService _tracksService;
 
@@ -33,10 +34,11 @@ namespace Tenplex.ViewModels
 
         #endregion Tracks
 
-        public AlbumPageViewModel(ISerializationService serializationService, ServerConnectionInfoService serverConnectionInfoService, ShellPage shell, TracksService tracksService)
+        public AlbumPageViewModel(AuthorizationService authorizationService, ConnectionsService connectionsService, ISerializationService serializationService, ShellPage shell, TracksService tracksService)
         {
+            _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
+            _connectionsService = connectionsService ?? throw new ArgumentNullException(nameof(connectionsService));
             _serializationService = serializationService ?? throw new ArgumentNullException(nameof(serializationService));
-            _serverConnectionInfoService = serverConnectionInfoService ?? throw new ArgumentNullException(nameof(serverConnectionInfoService));
             _shell = shell ?? throw new ArgumentNullException(nameof(shell));
             _tracksService = tracksService ?? throw new ArgumentNullException(nameof(tracksService));
         }
@@ -52,10 +54,18 @@ namespace Tenplex.ViewModels
 
         public void PlayTrack(Track track)
         {
-            var media = track.Media.First();
-            var part = media.Parts.First();
-            var url = $"http://{_serverConnectionInfoService.GetServerIpAddress()}:{_serverConnectionInfoService.GetServerPortNumber()}{part.Key}?X-Plex-Token={_serverConnectionInfoService.GetPlexAccessToken()}";
-            _shell.Play(url, $"http://{_serverConnectionInfoService.GetServerIpAddress()}:{_serverConnectionInfoService.GetServerPortNumber()}{Album.Thumb}?X-Plex-Token={_serverConnectionInfoService.GetPlexAccessToken()}");
+            var tracks = Tracks.AllItems.ToList();
+            _shell.ClearQueue();
+            _shell.AddToQueue(tracks.Skip(tracks.IndexOf(track))
+                .Take(tracks.Count)
+                .Select(t => new PlaybackItem
+                {
+                    Artist = Album.ParentTitle,
+                    PosterSource = $"{_connectionsService.CurrentConnection.Uri}{Album.Thumb}?X-Plex-Token={_authorizationService.GetAccessToken()}",
+                    Source = $"{_connectionsService.CurrentConnection.Uri}{t.Media.First().Parts.First().Key}?X-Plex-Token={_authorizationService.GetAccessToken()}",
+                    Title = t.Title
+                }));
+            _shell.Play();
         }
     }
 }
