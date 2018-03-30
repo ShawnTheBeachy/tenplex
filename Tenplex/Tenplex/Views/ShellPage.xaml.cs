@@ -44,7 +44,7 @@ namespace Tenplex.Views
 
             _mediaPlaybackList = new MediaPlaybackList
             {
-                ShuffleEnabled = true
+                // ShuffleEnabled = true
             };
             Player.Source = _mediaPlaybackList;
 

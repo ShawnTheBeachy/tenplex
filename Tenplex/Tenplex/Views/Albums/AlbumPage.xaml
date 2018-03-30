@@ -95,7 +95,7 @@
 
                 <TextBlock x:Name="AlbumTitle"
                            FontWeight="SemiBold"
-                           Margin="0 12 0 0"
+                           Margin="0 12 12 0"
                            MaxLines="3"
                            RelativePanel.AlignTopWith="AlbumImage"
                            RelativePanel.RightOf="AlbumImage"
@@ -105,6 +105,7 @@
                            ToolTipService.ToolTip="{x:Bind ViewModel.Album.Title, Mode=OneWay}" />
 
                 <TextBlock x:Name="AlbumArtist"
+                           Margin="0 0 12 0"
                            RelativePanel.Below="AlbumTitle"
                            RelativePanel.RightOf="AlbumImage"
                            Style="{ThemeResource SubheaderTextBlockStyle}"
@@ -136,16 +137,10 @@
 
                         <ListView.Header>
                             <RelativePanel>
-                                <TextBlock x:Name="TracksHeader"
-                                           Margin="12"
-                                           Style="{ThemeResource SubtitleTextBlockStyle}"
-                                           Text="Tracks" />
-
                                 <Grid x:Name="HeaderGrid"
                                       Margin="12"
                                       RelativePanel.AlignLeftWithPanel="True"
-                                      RelativePanel.AlignRightWithPanel="True"
-                                      RelativePanel.Below="TracksHeader">
+                                      RelativePanel.AlignRightWithPanel="True">
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="60" />
