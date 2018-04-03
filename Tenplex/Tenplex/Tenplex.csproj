@@ -100,6 +100,7 @@
     <Compile Include="Comparers\TrackComparer.cs" />
     <Compile Include="Controls\GroupedObservableCollection\GroupedObservableCollection.cs" />
     <Compile Include="Controls\GroupedObservableCollection\Grouping.cs" />
+    <Compile Include="Converters\DurationDisplayConverter.cs" />
     <Compile Include="Helpers\ImageHelpers.cs" />
     <Compile Include="Models\PlaybackItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,11 +112,13 @@
     <Compile Include="Services\LibrarySectionsService.cs" />
     <Compile Include="Services\NewtonsoftSerializationService.cs" />
     <Compile Include="Services\ServersService.cs" />
+    <Compile Include="Services\ShowsService.cs" />
     <Compile Include="Services\TracksService.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="ViewModels\Albums\AlbumPageViewModel.cs" />
     <Compile Include="ViewModels\Albums\AlbumsPageViewModel.cs" />
     <Compile Include="ViewModels\Artists\ArtistsPageViewModel.cs" />
+    <Compile Include="ViewModels\Shows\ShowsPageViewModel.cs" />
     <Compile Include="ViewModels\SignInPageViewModel.cs" />
     <Compile Include="ViewModels\UsersPageViewModel.cs" />
     <Compile Include="Views\Albums\AlbumPage.xaml.cs">
@@ -129,6 +132,9 @@
     </Compile>
     <Compile Include="Views\ShellPage.xaml.cs">
       <DependentUpon>ShellPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowsPage.xaml.cs">
+      <DependentUpon>ShowsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignInPage.xaml.cs">
       <DependentUpon>SignInPage.xaml</DependentUpon>
@@ -164,19 +170,19 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\TLT_Template10\Source\Prism.Unity.Windows\Prism.Unity.Windows.csproj">
+    <ProjectReference Include="..\..\..\Template10_TLT\Source\Prism.Unity.Windows\Prism.Unity.Windows.csproj">
       <Project>{cc3018eb-6d2b-4306-94a1-3a7cba7a8f18}</Project>
       <Name>Prism.Unity.Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\TLT_Template10\Source\Prism.Windows\Prism.Windows.csproj">
+    <ProjectReference Include="..\..\..\Template10_TLT\Source\Prism.Windows\Prism.Windows.csproj">
       <Project>{648c8631-c97f-4b81-98fc-f4370317751a}</Project>
       <Name>Prism.Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\TLT_Template10\Source\Template10.Extras.10586\Template10.Extras.10586.csproj">
+    <ProjectReference Include="..\..\..\Template10_TLT\Source\Template10.Extras.10586\Template10.Extras.10586.csproj">
       <Project>{9bb18d4b-bcdd-43c9-a7c2-416d13dd39a6}</Project>
       <Name>Template10.Extras.10586</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\TLT_Template10\Source\Template10.Extras.16299\Template10.Extras.16299.csproj">
+    <ProjectReference Include="..\..\..\Template10_TLT\Source\Template10.Extras.16299\Template10.Extras.16299.csproj">
       <Project>{51e89714-0358-486d-8dfb-6600a3fa7319}</Project>
       <Name>Template10.Extras.16299</Name>
     </ProjectReference>
@@ -186,6 +192,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ksemenenko.ColorThief">
+      <Version>1.1.0.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
     </PackageReference>
@@ -219,6 +228,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ShowsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SignInPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -231,6 +244,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Shows\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

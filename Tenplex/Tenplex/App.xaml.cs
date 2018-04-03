@@ -54,6 +54,7 @@ namespace Tenplex
             container.Register<AuthorizationService, AuthorizationService>();
             container.Register<AlbumsService, AlbumsService>();
             container.Register<ArtistsService, ArtistsService>();
+            container.Register<ShowsService, ShowsService>();
             container.Register<TracksService, TracksService>();
 
             container.RegisterSingleton<ConnectionsService, ConnectionsService>();
@@ -66,6 +67,7 @@ namespace Tenplex
             container.RegisterSingleton<ShellPage, ShellPage>();
             container.RegisterForNavigation<AlbumsPage, AlbumsPageViewModel>("MusicPage");
             container.RegisterForNavigation<AlbumPage, AlbumPageViewModel>(nameof(AlbumPage));
+            container.RegisterForNavigation<ShowsPage, ShowsPageViewModel>(nameof(ShowsPage));
             container.RegisterForNavigation<SignInPage, SignInPageViewModel>(nameof(SignInPage));
             container.RegisterForNavigation<UsersPage, UsersPageViewModel>(nameof(UsersPage));
         }

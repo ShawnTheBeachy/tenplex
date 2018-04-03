@@ -37,10 +37,10 @@ namespace Tenplex.Views
             var animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("albumImage");
             animation?.TryStart(AlbumImage, new[] { AlbumTitle, AlbumArtist, AlbumYear });
         }
-
-        private void TracksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        private void TracksListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var selectedTrack = TracksListView.SelectedItem as Track;
+            var selectedTrack = e.ClickedItem as Track;
             ViewModel.PlayTrack(selectedTrack);
         }
     }

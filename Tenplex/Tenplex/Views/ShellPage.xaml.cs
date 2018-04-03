@@ -1,4 +1,5 @@
-﻿using Prism.Navigation;
+﻿using ColorThiefDotNet;
+using Prism.Navigation;
 using Prism.Services;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using Template10.Controls;
 using Tenplex.Models;
 using Tenplex.Services;
 using Windows.ApplicationModel.Core;
+using Windows.Graphics.Imaging;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.Storage.Streams;
@@ -85,6 +87,11 @@ namespace Tenplex.Views
                             var bitmap = new BitmapImage();
                             bitmap.SetSource(stream);
                             PosterImage.Source = bitmap;
+
+                            var decoder = await BitmapDecoder.CreateAsync(stream);
+                            var colorThief = new ColorThief();
+                            var color = await colorThief.GetColor(decoder);
+                            TransportControlsBackgroundBrush.TintColor = Windows.UI.Color.FromArgb(color.Color.A, color.Color.R, color.Color.G, color.Color.B);
                         }
                     }
                 });
@@ -155,7 +162,8 @@ namespace Tenplex.Views
                 {
                     Content = section.Title
                 };
-                NavViewProps.SetNavigationUri(item, PathBuilder.Create("MusicPage", ("sectionKey", section.Key)).ToString());
+                var pageName = section.Type == LibrarySectionType.Artist ? "MusicPage" : "ShowsPage";
+                NavViewProps.SetNavigationUri(item, PathBuilder.Create(pageName, ("sectionKey", section.Key)).ToString());
                 items.Add(item);
             }
 

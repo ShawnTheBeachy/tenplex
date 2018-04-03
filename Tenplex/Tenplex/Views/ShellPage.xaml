@@ -44,7 +44,8 @@
               Grid.Row="1">
 
             <Grid.Background>
-                <AcrylicBrush BackgroundSource="HostBackdrop"
+                <AcrylicBrush x:Name="TransportControlsBackgroundBrush"
+                              BackgroundSource="HostBackdrop"
                               Opacity=".8"
                               TintColor="{ThemeResource SystemAccentColor}"
                               TintOpacity=".8" />

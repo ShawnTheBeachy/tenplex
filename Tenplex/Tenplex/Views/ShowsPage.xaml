@@ -1,0 +1,43 @@
+﻿<Page x:Class="Tenplex.Views.ShowsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:helpers="using:Tenplex.Helpers"
+      xmlns:models="using:Tenplex.Models"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <GridView x:Name="ShowsGridView"
+                  IsItemClickEnabled="True"
+                  ItemsSource="{x:Bind ViewModel.Shows, Mode=OneWay}"
+                  Padding="4"
+                  SelectionMode="None">
+
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="models:Show">
+                    <RelativePanel x:Name="ShowPanel"
+                                   Width="204">
+
+                        <Image x:Name="ArtworkImage"
+                               Height="300"
+                               HorizontalAlignment="Center"
+                               Source="{x:Bind helpers:ImageHelpers.GetThumbUrl(Thumb, 300, 300)}"
+                               Stretch="UniformToFill"
+                               VerticalAlignment="Center"
+                               Width="204" />
+
+                        <TextBlock x:Name="ShowNameTextBlock"
+                                   Margin="2 6 2 4"
+                                   RelativePanel.Below="ArtworkImage"
+                                   Style="{ThemeResource BaseTextBlockStyle}"
+                                   Text="{x:Bind Title}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="Wrap" />
+                        
+                    </RelativePanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+            
+        </GridView>
+
+    </RelativePanel>
+</Page>

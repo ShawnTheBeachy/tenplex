@@ -14,6 +14,14 @@ namespace Tenplex.Models
 
         #endregion AuthToken
 
+        #region HasPassword
+
+        private bool _hasPassword;
+        [XmlAttribute("hasPassword")]
+        public bool HasPassword { get => _hasPassword; set => Set(ref _hasPassword, value); }
+
+        #endregion HasPassword
+
         #region Id
 
         private string _id;

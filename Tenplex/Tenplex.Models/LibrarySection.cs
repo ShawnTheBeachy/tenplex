@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using Tenplex.Models.JsonConverters;
 
 namespace Tenplex.Models
 {
@@ -170,7 +171,7 @@ namespace Tenplex.Models
         /// <summary>
         /// The type of this section.
         /// </summary>
-        // [JsonProperty("type")]      //TODO: Use custom converter.
+        [JsonProperty("type"), JsonConverter(typeof(LibrarySectionTypeConverter))]
         public LibrarySectionType Type { get => _type; set => Set(ref _type, value); }
 
         #endregion Type
