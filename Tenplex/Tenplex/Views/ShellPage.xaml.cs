@@ -72,27 +72,27 @@ namespace Tenplex.Views
                 {
                     if (s.CurrentItem == null)
                     {
-                        PosterImage.Source = null;
+                        // PosterImage.Source = null;
                     }
 
                     else
                     {
-                        var props = s.CurrentItem.GetDisplayProperties();
-                        CurrentItemTitle.Text = props.MusicProperties.Title;
-                        CurrentItemArtist.Text = props.MusicProperties.Artist;
+                        //var props = s.CurrentItem.GetDisplayProperties();
+                        //CurrentItemTitle.Text = props.MusicProperties.Title;
+                        //CurrentItemArtist.Text = props.MusicProperties.Artist;
 
-                        using (var streamRef = await props.Thumbnail.OpenReadAsync())
-                        {
-                            var stream = streamRef.AsStream().AsRandomAccessStream();
-                            var bitmap = new BitmapImage();
-                            bitmap.SetSource(stream);
-                            PosterImage.Source = bitmap;
+                        //using (var streamRef = await props.Thumbnail.OpenReadAsync())
+                        //{
+                        //    var stream = streamRef.AsStream().AsRandomAccessStream();
+                        //    var bitmap = new BitmapImage();
+                        //    bitmap.SetSource(stream);
+                        //    PosterImage.Source = bitmap;
 
-                            var decoder = await BitmapDecoder.CreateAsync(stream);
-                            var colorThief = new ColorThief();
-                            var color = await colorThief.GetColor(decoder);
-                            TransportControlsBackgroundBrush.TintColor = Windows.UI.Color.FromArgb(color.Color.A, color.Color.R, color.Color.G, color.Color.B);
-                        }
+                        //    var decoder = await BitmapDecoder.CreateAsync(stream);
+                        //    var colorThief = new ColorThief();
+                        //    var color = await colorThief.GetColor(decoder);
+                        //    TransportControlsBackgroundBrush.TintColor = Windows.UI.Color.FromArgb(color.Color.A, color.Color.R, color.Color.G, color.Color.B);
+                        //}
                     }
                 });
             };

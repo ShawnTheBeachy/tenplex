@@ -100,6 +100,7 @@
     <Compile Include="Comparers\TrackComparer.cs" />
     <Compile Include="Controls\GroupedObservableCollection\GroupedObservableCollection.cs" />
     <Compile Include="Controls\GroupedObservableCollection\Grouping.cs" />
+    <Compile Include="Controls\TenplexMediaTransportControls.cs" />
     <Compile Include="Converters\DurationDisplayConverter.cs" />
     <Compile Include="Helpers\ImageHelpers.cs" />
     <Compile Include="Models\PlaybackItem.cs" />
@@ -133,7 +134,7 @@
     <Compile Include="Views\ShellPage.xaml.cs">
       <DependentUpon>ShellPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ShowsPage.xaml.cs">
+    <Compile Include="Views\Shows\ShowsPage.xaml.cs">
       <DependentUpon>ShowsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignInPage.xaml.cs">
@@ -228,7 +229,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ShowsPage.xaml">
+    <Page Include="Views\Shows\ShowsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -245,9 +246,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Shows\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
