@@ -1,6 +1,5 @@
 ﻿<Page x:Class="Tenplex.Views.ShellPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:controls="using:Tenplex.Controls"
       xmlns:local="using:Tenplex.Views"
       xmlns:t10controls="using:Template10.Controls"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -34,53 +33,124 @@
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout x:Name="DevicesFlyout" />
                         </FlyoutBase.AttachedFlyout>
-                        
+
                     </NavigationViewItem>
                 </StackPanel>
             </NavigationView.PaneFooter>
 
         </t10controls:NavViewEx>
 
+        <Grid x:Name="TransportControlsBackground"
+              Grid.Row="1">
+
+            <Grid.Background>
+                <AcrylicBrush x:Name="TransportControlsBackgroundBrush"
+                              BackgroundSource="HostBackdrop"
+                              Opacity=".8"
+                              TintColor="{ThemeResource SystemAccentColor}"
+                              TintOpacity=".8" />
+            </Grid.Background>
+
+        </Grid>
+
         <Grid x:Name="PlayerGrid"
               Grid.Row="1"
               Visibility="Collapsed">
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="CurrentItemButton"
+                    Background="#99000000"
+                    BorderThickness="0"
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Padding="0"
+                    Style="{ThemeResource EllipsisButtonRevealStyle}"
+                    VerticalAlignment="Bottom"
+                    Width="320">
+
+                <RelativePanel x:Name="CurrentItemPanel">
+
+                    <Image x:Name="PosterImage"
+                           Height="96"
+                           HorizontalAlignment="Center"
+                           RelativePanel.AlignLeftWithPanel="True"
+                           Stretch="UniformToFill"
+                           VerticalAlignment="Center"
+                           Width="96" />
+
+                    <RelativePanel Margin="12"
+                                   RelativePanel.AlignVerticalCenterWithPanel="True"
+                                   RelativePanel.RightOf="PosterImage">
+
+                        <TextBlock x:Name="CurrentItemTitle"
+                                   Style="{ThemeResource SubtitleTextBlockStyle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="NoWrap" />
+
+                        <TextBlock x:Name="CurrentItemArtist"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="{ThemeResource ApplicationSecondaryForegroundThemeBrush}"
+                                   RelativePanel.Below="CurrentItemTitle"
+                                   Style="{ThemeResource SubtitleTextBlockStyle}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="NoWrap" />
+
+                    </RelativePanel>
+
+                </RelativePanel>
+
+            </Button>
+
+            <Button x:Name="ClearButton"
+                    Background="#99000000"
+                    BorderThickness="0"
+                    Click="ClearButton_Click"
+                    Grid.Column="1"
+                    Height="96"
+                    HorizontalContentAlignment="Center"
+                    Padding="0"
+                    Style="{ThemeResource EllipsisButtonRevealStyle}"
+                    VerticalAlignment="Bottom"
+                    VerticalContentAlignment="Center"
+                    Width="24">
+                <FontIcon x:Name="ClearIcon"
+                          FontFamily="/Assets/Fonts/Tenplex/Tenplex.ttf#Tenplex"
+                          Glyph="&#xf107;" />
+            </Button>
+
             <MediaPlayerElement x:Name="Player"
                                 AreTransportControlsEnabled="True"
                                 AutoPlay="True"
+                                Grid.Column="2"
                                 HorizontalAlignment="Stretch">
 
                 <MediaPlayerElement.TransportControls>
-                    <controls:TenplexMediaTransportControls x:Name="ShellTransportControls"
-                                                            IsFullWindowButtonVisible="False"
-                                                            IsFullWindowEnabled="False"
-                                                            IsNextTrackButtonVisible="True"
-                                                            IsPlaybackRateButtonVisible="True"
-                                                            IsPlaybackRateEnabled="True"
-                                                            IsPreviousTrackButtonVisible="True"
-                                                            IsRepeatButtonVisible="True"
-                                                            IsRepeatEnabled="True"
-                                                            IsSkipBackwardButtonVisible="True"
-                                                            IsSkipBackwardEnabled="True"
-                                                            IsSkipForwardButtonVisible="True"
-                                                            IsSkipForwardEnabled="True"
-                                                            IsZoomButtonVisible="False"
-                                                            IsZoomEnabled="False">
-
-                        <controls:TenplexMediaTransportControls.Background>
-                            <AcrylicBrush x:Name="TransportControlsBackgroundBrush"
-                                          BackgroundSource="HostBackdrop"
-                                          Opacity=".8"
-                                          TintColor="{ThemeResource SystemAccentColor}"
-                                          TintOpacity=".8" />
-                        </controls:TenplexMediaTransportControls.Background>                      
-
-                    </controls:TenplexMediaTransportControls>
+                    <MediaTransportControls x:Name="ShellTransportControls"
+                                            IsFullWindowButtonVisible="False"
+                                            IsFullWindowEnabled="False"
+                                            IsNextTrackButtonVisible="True"
+                                            IsPlaybackRateButtonVisible="True"
+                                            IsPlaybackRateEnabled="True"
+                                            IsPreviousTrackButtonVisible="True"
+                                            IsRepeatButtonVisible="True"
+                                            IsRepeatEnabled="True"
+                                            IsSkipBackwardButtonVisible="True"
+                                            IsSkipBackwardEnabled="True"
+                                            IsSkipForwardButtonVisible="True"
+                                            IsSkipForwardEnabled="True"
+                                            IsZoomButtonVisible="False"
+                                            IsZoomEnabled="False" />
                 </MediaPlayerElement.TransportControls>
 
             </MediaPlayerElement>
 
         </Grid>
-
     </Grid>
 </Page>

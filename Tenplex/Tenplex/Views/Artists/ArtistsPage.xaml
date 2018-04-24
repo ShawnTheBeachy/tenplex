@@ -60,7 +60,7 @@
 
                         <Image x:Name="ArtistArtworkImage"
                                Height="{StaticResource ArtistArtworkSize}"
-                               Source="{x:Bind helpers:ImageHelpers.GetThumbUrl(Thumb)}"
+                               Source="{x:Bind helpers:ImageHelpers.GetImageUrl(Thumb)}"
                                Stretch="UniformToFill"
                                Width="{StaticResource ArtistArtworkSize}" />
 

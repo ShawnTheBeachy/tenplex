@@ -64,7 +64,7 @@
                         <Image x:Name="AlbumArtworkImage"
                                Height="{StaticResource AlbumArtworkSize}"
                                HorizontalAlignment="Center"
-                               Source="{x:Bind helpers:ImageHelpers.GetThumbUrl(Thumb, 300, 300)}"
+                               Source="{x:Bind helpers:ImageHelpers.GetImageUrl(Thumb, 300, 300)}"
                                Stretch="UniformToFill"
                                VerticalAlignment="Center"
                                Width="{StaticResource AlbumArtworkSize}" />

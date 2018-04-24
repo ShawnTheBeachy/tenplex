@@ -1,12 +1,9 @@
 ﻿using Prism.Unity;
-using System;
 using Tenplex.Models;
 using Tenplex.Services;
 using Tenplex.ViewModels;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 namespace Tenplex.Views
@@ -23,13 +20,7 @@ namespace Tenplex.Views
             _authorizationService = Prism.PrismApplicationBase.Current.Container.Resolve<AuthorizationService>();
             _connectionsService = Prism.PrismApplicationBase.Current.Container.Resolve<ConnectionsService>();
         }
-
-        public ImageSource GetImageSource(string url)
-        {
-            var bitmap = new BitmapImage(new Uri($"{_connectionsService.CurrentConnection.Uri}{url}?X-Plex-Token={_authorizationService.GetAccessToken()}"));
-            return bitmap;
-        }
-
+        
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
