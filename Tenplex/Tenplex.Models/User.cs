@@ -30,6 +30,22 @@ namespace Tenplex.Models
 
         #endregion Id
 
+        #region IsAdmin
+
+        private bool _isAdmin;
+        [XmlAttribute("admin")]
+        public bool IsAdmin { get => _isAdmin; set => Set(ref _isAdmin, value); }
+
+        #endregion IsAdmin
+
+        #region IsProtected
+
+        private bool _isProtected;
+        [XmlAttribute("protected")]
+        public bool IsProtected { get => _isProtected; set => Set(ref _isProtected, value); }
+
+        #endregion IsProtected
+
         #region Thumb
 
         private string _thumb;

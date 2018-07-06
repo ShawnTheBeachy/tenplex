@@ -3,6 +3,29 @@
       xmlns:models="using:Tenplex.Models"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <Page.Resources>
+        <Flyout x:Name="PasswordFlyout"
+                Placement="Full"
+                FlyoutPresenterStyle="{StaticResource VirtualFlyoutStyle}">
+
+            <StackPanel x:Name="PasswordStackPanel"
+                        Orientation="Vertical"
+                        Padding="24">
+                <PasswordBox x:Name="PasswordBox"
+                             Header="Password"
+                             InputScope="NumericPin"
+                             PlaceholderText="Password" />
+                <Button x:Name="SubmitPasswordButton"
+                        Click="SubmitPasswordButton_Click"
+                        Content="OK"
+                        Margin="0 12 0 0"
+                        Style="{ThemeResource ButtonRevealStyle}"
+                        Width="120" />
+            </StackPanel>
+            
+        </Flyout>
+    </Page.Resources>
+
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <TextBlock x:Name="TitleTextBlock"

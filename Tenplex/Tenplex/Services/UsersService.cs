@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Template10.Services.Settings;
@@ -15,6 +16,8 @@ namespace Tenplex.Services
         private readonly ServersService _serversService;
         private readonly ISettingsHelper _settingsHelper;
         private List<User> _users = new List<User>();
+
+        public readonly Subject<User> CurrentUserSwitched = new Subject<User>();
 
         public User CurrentUser { get; set; }
 
@@ -36,7 +39,9 @@ namespace Tenplex.Services
             await LoadUsersAsync();
 
             if (!string.IsNullOrWhiteSpace(defaultUserId))
+            {
                 await SwitchUserAsync(_users.FirstOrDefault(user => user.Id == defaultUserId));
+            }
         }
 
         public async Task<IEnumerable<User>> LoadUsersAsync()
@@ -66,8 +71,10 @@ namespace Tenplex.Services
             }
         }
 
-        public async Task<User> SwitchUserAsync(User user)
+        public async Task<User> SwitchUserAsync(User user, string pin = null)
         {
+            CurrentUser = user;
+
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("X-Plex-Client-Identifier", "tenplex");
@@ -75,7 +82,7 @@ namespace Tenplex.Services
                 client.DefaultRequestHeaders.Add("X-Plex-Token", _serversService.CurrentServer.AccessToken);
                 client.DefaultRequestHeaders.Add("X-Plex-Version", "1.0.0");
 
-                var response = await client.PostAsync(new Uri($"https://plex.tv/api/v2/home/users/{user.UniqueId}/switch"), null);
+                var response = await client.PostAsync(new Uri($"https://plex.tv/api/v2/home/users/{user.UniqueId}/switch{(string.IsNullOrWhiteSpace(pin) ? "" : $"?pin={pin}")}"), null);
                 var content = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
@@ -84,7 +91,9 @@ namespace Tenplex.Services
                 {
                     var reader = new StringReader(content);
                     var deserializer = new XmlSerializer(typeof(User), new XmlRootAttribute("user"));
-                    CurrentUser = (User)deserializer.Deserialize(reader);
+                    var newUser = (User)deserializer.Deserialize(reader);
+                    CurrentUser.AuthToken = newUser.AuthToken;
+                    CurrentUserSwitched.OnNext(CurrentUser);
                     return CurrentUser;
                 }
             }

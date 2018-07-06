@@ -1,4 +1,5 @@
-﻿using Prism;
+﻿using Newtonsoft.Json;
+using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
@@ -120,15 +121,9 @@ namespace Tenplex
 
                             var shell = Container.Resolve<ShellPage>();
                             Window.Current.Content = shell;
-
+                            
                             navigationService = shell.ShellView.NavigationService;
                             navigationPath = PathBuilder.Create(nameof(UsersPage)).ToString();
-
-                            var connectionsService = Container.Resolve<ConnectionsService>();
-                            await connectionsService.InitializeAsync();
-
-                            var librarySectionsService = Container.Resolve<LibrarySectionsService>();
-                            await librarySectionsService.InitializeAsync();
                         }
                     }
 

@@ -3,6 +3,7 @@ using Prism.Navigation;
 using Prism.Unity;
 using System;
 using Template10.Services.Serialization;
+using Tenplex.Models;
 using Tenplex.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -26,7 +27,7 @@ namespace Tenplex.Views
             // Prepare connected artwork animation.
             AlbumsGridView.PrepareConnectedAnimation("albumImage", e.ClickedItem, "AlbumArtworkImage");
 
-            var path = PathBuilder.Create(nameof(AlbumPage), ("album", _serializationService.Serialize(e.ClickedItem))).ToString();
+            var path = PathBuilder.Create(nameof(AlbumPage), ("ratingKey", (e.ClickedItem as Album).RatingKey)).ToString();
             var container = Prism.PrismApplicationBase.Current.Container as UnityContainerExtension;
             await container.Resolve<ShellPage>().ShellView.NavigationService.NavigateAsync(path, null, new DrillInNavigationTransitionInfo());
         }

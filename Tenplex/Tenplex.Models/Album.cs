@@ -19,6 +19,14 @@ namespace Tenplex.Models
 
         #endregion Art
 
+        #region LibrarySectionId
+
+        private int _librarySectionId;
+        [JsonProperty("librarySectionID")]
+        public int LibrarySectionId { get => _librarySectionId; set => Set(ref _librarySectionId, value); }
+
+        #endregion LibrarySectionId
+
         #region ParentTitle
 
         private string _parentTitle = default(string);

@@ -29,7 +29,7 @@ namespace Tenplex.Helpers
             var authorizationService = Prism.PrismApplicationBase.Current.Container.Resolve<AuthorizationService>();
             var connectionsService = Prism.PrismApplicationBase.Current.Container.Resolve<ConnectionsService>();
 
-            var bitmap = new BitmapImage(new Uri($"{connectionsService.CurrentConnection.Uri}/photo/:/transcode?width={width}&height={height}&minSize=1&url={WebUtility.UrlEncode($"{url}?X-Plex-Token={authorizationService.GetAccessToken()}")}&X-Plex-Token={authorizationService.GetAccessToken()}"));
+            var bitmap = new BitmapImage(new Uri($"{connectionsService.CurrentConnection.Uri}/photo/:/transcode?width={width}&height={height}&minSize=1&url={WebUtility.UrlEncode($"{url}&X-Plex-Token={authorizationService.GetAccessToken()}")}&X-Plex-Token={authorizationService.GetAccessToken()}"));
             return bitmap;
         }
     }

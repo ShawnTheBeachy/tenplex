@@ -5,129 +5,261 @@
       xmlns:helpers="using:Tenplex.Helpers"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:models="using:Tenplex.Models"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
         <CollectionViewSource x:Key="TracksViewSource"
                               IsSourceGrouped="True"
                               Source="{Binding Tracks, Mode=OneWay}" />
         <converters:DurationDisplayConverter x:Key="DurationDisplayConverter" />
+        <Flyout x:Name="AlbumEditPopup"
+                Placement="Full"
+                FlyoutPresenterStyle="{StaticResource VirtualFlyoutStyle}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Pivot Grid.Row="0"
+                       Style="{StaticResource CenteredPivot}">
+                    <PivotItem Header="General">
+                        <RelativePanel>
+                            <TextBox x:Name="ArtistTextBox"
+                                     Header="Artist"
+                                     PlaceholderText="Artist"
+                                     RelativePanel.AlignLeftWithPanel="True"
+                                     RelativePanel.AlignRightWithPanel="True"
+                                     Text="{x:Bind ViewModel.Properties.Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox x:Name="AlbumTitleTextBox"
+                                     Header="Album"
+                                     Margin="0 12 0 0"
+                                     PlaceholderText="Album"
+                                     RelativePanel.AlignLeftWithPanel="True"
+                                     RelativePanel.AlignRightWithPanel="True"
+                                     RelativePanel.Below="ArtistTextBox"
+                                     Text="{x:Bind ViewModel.Properties.Album, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox x:Name="AlbumSortTitleTextBox"
+                                     Header="Sort Album"
+                                     Margin="0 12 0 0"
+                                     PlaceholderText="Sort Album"
+                                     RelativePanel.AlignLeftWithPanel="True"
+                                     RelativePanel.AlignRightWithPanel="True"
+                                     RelativePanel.Below="AlbumTitleTextBox"
+                                     Text="{x:Bind ViewModel.Properties.SortAlbum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock x:Name="RatingHeader"
+                                       Margin="0 12 0 0"
+                                       RelativePanel.AlignLeftWithPanel="True"
+                                       RelativePanel.Below="AlbumSortTitleTextBox"
+                                       Text="Rating" />
+                            <RatingControl x:Name="Rating"
+                                           InitialSetValue="0"
+                                           Margin="0 12 0 0"
+                                           PlaceholderValue="0"
+                                           RelativePanel.AlignLeftWithPanel="True"
+                                           RelativePanel.Below="RatingHeader"
+                                           Value="{x:Bind ViewModel.Properties.Rating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <DatePicker x:Name="OriginallyAvailablePicker"
+                                        Date="{x:Bind ViewModel.Properties.OriginallyAvailable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeOffsetConverter}}"
+                                        Header="Originally Available"
+                                        Margin="0 12 0 0"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True"
+                                        RelativePanel.Below="Rating" />
+                            <TextBox x:Name="RecordLabelTextBox"
+                                     Header="Record Label"
+                                     Margin="0 12 0 0"
+                                     PlaceholderText="Record Label"
+                                     RelativePanel.AlignLeftWithPanel="True"
+                                     RelativePanel.AlignRightWithPanel="True"
+                                     RelativePanel.Below="OriginallyAvailablePicker"
+                                     Text="{x:Bind ViewModel.Properties.RecordLabel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox x:Name="ReviewTextBox"
+                                     AcceptsReturn="True"
+                                     Header="Review"
+                                     Margin="0 12 0 0"
+                                     PlaceholderText="Review"
+                                     RelativePanel.AlignLeftWithPanel="True"
+                                     RelativePanel.AlignRightWithPanel="True"
+                                     RelativePanel.Below="RecordLabelTextBox"
+                                     Text="{x:Bind ViewModel.Properties.Review, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </RelativePanel>
+                    </PivotItem>
+                    <PivotItem Header="Poster">
+                        <RelativePanel>
+                            <TextBlock x:Name="ClearPosterTextBlock">
+                            <Hyperlink x:Name="ClearPosterHyperlink" 
+                                       Click="ClearPosterHyperlink_Click"
+                                       Foreground="{ThemeResource SystemAccentColorLight2}">Remove poster</Hyperlink>
+                            </TextBlock>
+                            <GridView x:Name="PostersGridView"
+                                      IsItemClickEnabled="True"
+                                      ItemClick="PostersGridView_ItemClick"
+                                      ItemsSource="{x:Bind ViewModel.Posters, Mode=OneWay}"
+                                      Loaded="PostersGridView_Loaded"
+                                      Margin="0 12 0 0"
+                                      RelativePanel.Below="ClearPosterTextBlock"
+                                      SelectionMode="None">
+
+                                <GridView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Poster">
+                                        <Grid>
+                                            <Image x:Name="PosterImage"
+                                                   Height="144"
+                                                   Source="{x:Bind helpers:ImageHelpers.GetImageUrl(Thumb, 200, 200), Mode=OneWay}"
+                                                   Width="144" />
+                                            <Grid x:Name="IsSelectedGrid"
+                                                  x:Load="{x:Bind IsSelected, Mode=OneWay}"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch">
+
+                                                <Grid.Background>
+                                                    <SolidColorBrush Color="Black"
+                                                                     Opacity=".8" />
+                                                </Grid.Background>
+
+                                                <SymbolIcon HorizontalAlignment="Center"
+                                                            Symbol="Accept"
+                                                            VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+
+                            </GridView>
+                        </RelativePanel>
+                    </PivotItem>
+                </Pivot>
+
+                <Button x:Name="SavePropertiesButton"
+                        Click="SavePropertiesButton_Click"
+                        Content="Save"
+                        Grid.Row="1"
+                        Margin="12"
+                        RelativePanel.Below="ReviewTextBox"
+                        Style="{ThemeResource ButtonRevealStyle}"
+                        Width="120" />
+            </Grid>
+            
+        </Flyout>
     </Page.Resources>
 
-    <ScrollViewer x:Name="MainScrollViewer" 
-                  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  VerticalScrollBarVisibility="Auto">
+    <RelativePanel>
 
-        <RelativePanel>
-
-            <RelativePanel x:Name="HeaderPanel"
-                           Height="480"
-                           RelativePanel.AlignLeftWithPanel="True"
-                           RelativePanel.AlignRightWithPanel="True"
-                           RelativePanel.AlignTopWithPanel="True">
-
-                <Image x:Name="HeaderImage"
-                       HorizontalAlignment="Center"
-                       RelativePanel.AlignBottomWithPanel="True"
+        <RelativePanel x:Name="HeaderPanel"
+                       Height="480"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"
-                       RelativePanel.AlignTopWithPanel="True"
-                       Source="{x:Bind helpers:ImageHelpers.GetImageUrl(ViewModel.Album.Art), Mode=OneWay}"
-                       Stretch="UniformToFill"
-                       VerticalAlignment="Center">
+                       RelativePanel.AlignTopWithPanel="True">
 
-                    <interactivity:Interaction.Behaviors>
-                        <effects:Blur AutomaticallyStart="True"
-                                      Duration="0"
-                                      Value="5" />
-                    </interactivity:Interaction.Behaviors>
+            <Image x:Name="HeaderImage"
+                   HorizontalAlignment="Center"
+                   RelativePanel.AlignBottomWithPanel="True"
+                   RelativePanel.AlignLeftWithPanel="True"
+                   RelativePanel.AlignRightWithPanel="True"
+                   RelativePanel.AlignTopWithPanel="True"
+                   Source="{x:Bind helpers:ImageHelpers.GetImageUrl(ViewModel.Album.Art), Mode=OneWay}"
+                   Stretch="UniformToFill"
+                   VerticalAlignment="Center">
 
-                </Image>
+                <interactivity:Interaction.Behaviors>
+                    <effects:Blur AutomaticallyStart="True"
+                                  Duration="0"
+                                  Value="5" />
+                </interactivity:Interaction.Behaviors>
 
-                <Grid x:Name="HeaderOverlayGrid"
-                      RelativePanel.AlignBottomWithPanel="True"
-                      RelativePanel.AlignLeftWithPanel="True"
-                      RelativePanel.AlignRightWithPanel="True"
-                      RelativePanel.AlignTopWithPanel="True">
+            </Image>
 
-                    <Grid.Background>
-                        <AcrylicBrush BackgroundSource="Backdrop"
-                                      FallbackColor="Transparent"
-                                      Opacity=".5"
-                                      TintColor="{ThemeResource SystemAccentColorDark1}"
-                                      TintOpacity=".5" />
-                    </Grid.Background>
+            <Grid x:Name="HeaderOverlayGrid"
+                  RelativePanel.AlignBottomWithPanel="True"
+                  RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.AlignRightWithPanel="True"
+                  RelativePanel.AlignTopWithPanel="True">
 
-                    <interactivity:Interaction.Behaviors>
-                        <interactivity:BehaviorCollection>
-                            <effects:Fade AutomaticallyStart="True"
+                <Grid.Background>
+                    <AcrylicBrush BackgroundSource="Backdrop"
+                                  FallbackColor="Transparent"
+                                  Opacity=".5"
+                                  TintColor="{ThemeResource SystemAccentColorDark1}"
+                                  TintOpacity=".5" />
+                </Grid.Background>
+
+                <interactivity:Interaction.Behaviors>
+                    <interactivity:BehaviorCollection>
+                        <effects:Fade AutomaticallyStart="True"
                                       Duration="0"
                                       Value="0" />
-                            <effects:Fade AutomaticallyStart="True"
+                        <effects:Fade AutomaticallyStart="True"
                                       Duration="1000"
                                       Value="1" />
-                        </interactivity:BehaviorCollection>
-                    </interactivity:Interaction.Behaviors>
+                    </interactivity:BehaviorCollection>
+                </interactivity:Interaction.Behaviors>
 
-                    <Grid HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
 
-                        <Grid.Background>
-                            <LinearGradientBrush EndPoint="0 1"
-                                                 StartPoint="0 0">
-                                <GradientStop Color="Transparent"
-                                              Offset="0" />
-                                <GradientStop Color="Black"
-                                              Offset="1" />
-                            </LinearGradientBrush>
-                        </Grid.Background>
-
-                    </Grid>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0 1"
+                                             StartPoint="0 0">
+                            <GradientStop Color="Transparent"
+                                          Offset="0" />
+                            <GradientStop Color="Black"
+                                          Offset="1" />
+                        </LinearGradientBrush>
+                    </Grid.Background>
 
                 </Grid>
 
-                <Image x:Name="AlbumImage"
-                       Height="300"
-                       Margin="24"
-                       RelativePanel.AlignVerticalCenterWithPanel="True"
-                       Source="{x:Bind helpers:ImageHelpers.GetImageUrl(ViewModel.Album.Thumb), Mode=OneWay}"
-                       Stretch="UniformToFill"
-                       Width="300" />
+            </Grid>
 
-                <TextBlock x:Name="AlbumTitle"
-                           FontWeight="SemiBold"
-                           Margin="0 12 12 0"
-                           MaxLines="3"
-                           RelativePanel.AlignTopWith="AlbumImage"
-                           RelativePanel.RightOf="AlbumImage"
-                           Style="{ThemeResource HeaderTextBlockStyle}"
-                           Text="{x:Bind ViewModel.Album.Title, Mode=OneWay}"
-                           TextTrimming="CharacterEllipsis"
-                           ToolTipService.ToolTip="{x:Bind ViewModel.Album.Title, Mode=OneWay}" />
+            <Image x:Name="AlbumImage"
+                   Height="300"
+                   Margin="24"
+                   RelativePanel.AlignVerticalCenterWithPanel="True"
+                   Source="{x:Bind helpers:ImageHelpers.GetImageUrl(ViewModel.Album.Thumb), Mode=OneWay}"
+                   Stretch="UniformToFill"
+                   Width="300" />
 
-                <TextBlock x:Name="AlbumArtist"
-                           Margin="0 0 12 0"
-                           RelativePanel.Below="AlbumTitle"
-                           RelativePanel.RightOf="AlbumImage"
-                           Style="{ThemeResource SubheaderTextBlockStyle}"
-                           Text="{x:Bind ViewModel.Album.ParentTitle, Mode=OneWay}" />
+            <TextBlock x:Name="AlbumTitle"
+                       FontWeight="SemiBold"
+                       Margin="0 12 12 0"
+                       MaxLines="3"
+                       RelativePanel.AlignTopWith="AlbumImage"
+                       RelativePanel.RightOf="AlbumImage"
+                       Style="{ThemeResource HeaderTextBlockStyle}"
+                       Text="{x:Bind ViewModel.Album.Title, Mode=OneWay}"
+                       TextTrimming="CharacterEllipsis"
+                       ToolTipService.ToolTip="{x:Bind ViewModel.Album.Title, Mode=OneWay}" />
 
-                <TextBlock x:Name="AlbumYear"
-                           x:Load="{x:Bind ViewModel.Album.Year, Mode=OneWay, Converter={StaticResource ZeroToFalse}}"
-                           RelativePanel.Below="AlbumArtist"
-                           RelativePanel.RightOf="AlbumImage"
-                           Style="{ThemeResource TitleTextBlockStyle}"
-                           Text="{x:Bind ViewModel.Album.Year, Mode=OneWay}" />
+            <TextBlock x:Name="AlbumArtist"
+                       Margin="0 0 12 0"
+                       RelativePanel.Below="AlbumTitle"
+                       RelativePanel.RightOf="AlbumImage"
+                       Style="{ThemeResource SubheaderTextBlockStyle}"
+                       Text="{x:Bind ViewModel.Album.ParentTitle, Mode=OneWay}" />
 
-            </RelativePanel>
+            <TextBlock x:Name="AlbumYear"
+                       x:Load="{x:Bind ViewModel.Album.Year, Mode=OneWay, Converter={StaticResource ZeroToFalse}}"
+                       RelativePanel.Below="AlbumArtist"
+                       RelativePanel.RightOf="AlbumImage"
+                       Style="{ThemeResource TitleTextBlockStyle}"
+                       Text="{x:Bind ViewModel.Album.Year, Mode=OneWay}" />
+            
+            <Button x:Name="EditButton"
+                    Click="EditButton_Click"
+                    Content="Edit"
+                    RelativePanel.Below="AlbumYear"
+                    RelativePanel.RightOf="AlbumImage" />
 
-            <SemanticZoom x:Name="TracksSemanticZoom"
-                          IsTabStop="False"
-                          RelativePanel.AlignLeftWithPanel="True"
-                          RelativePanel.AlignRightWithPanel="True"
-                          RelativePanel.Below="HeaderPanel">
+        </RelativePanel>
+
+        <SemanticZoom x:Name="TracksSemanticZoom"
+                      IsTabStop="False"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.Below="HeaderPanel">
 
                 <SemanticZoom.ZoomedInView>
                     <ListView x:Name="TracksListView"
@@ -156,7 +288,7 @@
 
                                     <Grid.Resources>
                                         <Style TargetType="TextBlock">
-                                            <Setter Target="FontWeight"
+                                            <Setter Property="FontWeight"
                                                     Value="SemiBold" />
                                         </Style>
                                     </Grid.Resources>
@@ -232,8 +364,6 @@
                 </SemanticZoom.ZoomedOutView>
 
             </SemanticZoom>
-        </RelativePanel>
-
-    </ScrollViewer>
+    </RelativePanel>
 
 </Page>

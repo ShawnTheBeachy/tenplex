@@ -8,7 +8,6 @@ using Template10.Utilities;
 using Tenplex.Models;
 using Tenplex.Services;
 using Tenplex.Views;
-using Windows.UI.Xaml;
 
 namespace Tenplex.ViewModels
 {
@@ -52,12 +51,12 @@ namespace Tenplex.ViewModels
             Users.AddRange(await _usersService.LoadUsersAsync());
         }
 
-        public async Task SelectUserAsync(User user)
+        public async Task SelectUserAsync(User user, string pin = null)
         {
             if (RememberSelection)
                 _usersService.SetDefaultUserId(user.Id);
 
-            var switchedUser = await _usersService.SwitchUserAsync(user);
+            var switchedUser = await _usersService.SwitchUserAsync(user, pin);
 
             if (switchedUser != null)
             {
@@ -74,8 +73,7 @@ namespace Tenplex.ViewModels
                 _apiService.AddHeader("X-Plex-Token", _devicesService.CurrentDevice.AccessToken);
                 
                 await _librarySectionsService.InitializeAsync();
-
-                Window.Current.Content = _shell;
+                await _shell.InitializeAsync();
                 var path = PathBuilder.Create(nameof(UsersPage)).ToString();
                 await _shell.ShellView.NavigationService.NavigateAsync(path);
             }

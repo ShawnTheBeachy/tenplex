@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using Template10.Controls;
 using Tenplex.Models;
 using Tenplex.Services;
@@ -152,22 +153,27 @@ namespace Tenplex.Views
             await _librarySectionsService.InitializeAsync();
         }
 
-        public static IList<NavigationViewItem> GetLibrarySections(ObservableCollection<LibrarySection> sections)
+        public async Task InitializeAsync()
         {
-            var items = new List<NavigationViewItem>();
+            ShellView.MenuItems.Clear();
+            await _connectionsService.InitializeAsync();
+            await _librarySectionsService.InitializeAsync();
+            LoadLibrarySections();
+        }
 
-            foreach (var section in sections)
+        private void LoadLibrarySections()
+        {
+            foreach (var section in _librarySectionsService.LibrarySections)
             {
                 var item = new NavigationViewItem
                 {
-                    Content = section.Title
+                    Content = section.Title,
+                    Icon = new SymbolIcon(Symbol.MusicInfo)
                 };
                 var pageName = section.Type == LibrarySectionType.Artist ? "MusicPage" : "ShowsPage";
                 NavViewProps.SetNavigationUri(item, PathBuilder.Create(pageName, ("sectionKey", section.Key)).ToString());
-                items.Add(item);
+                ShellView.MenuItems.Add(item);
             }
-
-            return items;
         }
 
         public void Play()
@@ -191,6 +197,11 @@ namespace Tenplex.Views
                 ShellView.IsPaneOpen = true;
                 ShellView.AutoSuggestBox?.Focus(FocusState.Programmatic);
             };
+        }
+
+        private async void ShellView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await InitializeAsync();
         }
     }
 }

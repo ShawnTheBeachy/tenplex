@@ -14,7 +14,7 @@
         <t10controls:NavViewEx x:Name="ShellView"
                                x:FieldModifier="Public"
                                Grid.Row="0"
-                               MenuItemsSource="{x:Bind local:ShellPage.GetLibrarySections(_librarySectionsService.LibrarySections), Mode=OneWay}"
+                               Loaded="ShellView_Loaded"
                                RequestedTheme="Dark"
                                Style="{ThemeResource MinimalNavigationView}">
 
